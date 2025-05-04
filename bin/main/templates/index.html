@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SzybkiPrzepis - Strona Główna</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    /* Globalne ustawienia */
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      padding: 5rem 0;
+      margin-bottom: 3rem;
+      color: white;
+      border-radius: 0 0 2rem 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .welcome-text {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .lead {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Przyciski akcji */
+    .action-button {
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .action-button i {
+      font-size: 1.2rem;
+    }
+
+    /* Sekcja cech */
+    .features-section {
+      padding: 3rem 0;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      height: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* Nawigacja - czarne tło i biały tekst */
+	.main-nav {
+	    background: #000;
+	    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+	    padding: 0.5rem 0;
+	}
+	
+	.nav-link {
+	    color: #fff !important;
+	    padding: 0.5rem 1rem !important;
+	    display: flex !important;
+	    align-items: center;
+	    gap: 0.5rem;
+	    transition: all 0.3s ease;
+	}
+	
+	.nav-link:hover {
+	    color: rgba(255,255,255,0.8) !important;
+	    transform: translateY(-2px);
+	}
+	
+	.navbar-brand {
+	    color: #fff !important;
+	}
+	
+	.navbar-toggler {
+	    border-color: rgba(255,255,255,0.1);
+	}
+	
+	.navbar-toggler-icon {
+	    filter: brightness(0) invert(1);
+	}
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #28a745;
+    }
+
+    /* Powiadomienie admina */
+    .admin-alert {
+      border: none;
+      border-radius: 1rem;
+      background: rgba(13,202,240,0.1);
+      border-left: 4px solid #0dcaf0;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    /* Stylizacja stopki */
+    footer {
+      background-color: #343a40;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Nawigacja -->
+  <div th:replace="~{navbar :: navbar}"></div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-icon">
+        <i class="bi bi-journal-bookmark"></i>
+      </div>
+      <h1 class="welcome-text">Witaj w SzybkiPrzepis!</h1>
+      <p class="lead">
+        Odkryj świat kulinarnych inspiracji, znajdź swoje ulubione przepisy lub podziel się 
+        swoimi kulinarnymi doświadczeniami z naszą społecznością.
+      </p>
+
+      <div class="row justify-content-center" style="gap: 1rem;">
+        <div class="col-md-4">
+          <a th:href="@{/recipe_list}" class="btn btn-light action-button">
+            <i class="bi bi-search"></i>
+            Przeglądaj Przepisy
+          </a>
+        </div>
+        <div class="col-md-4" th:if="${session.user != null}">
+          <a th:href="@{/new_recipe}" class="btn btn-outline-light action-button">
+            <i class="bi bi-plus-circle"></i>
+            Dodaj Przepis
+          </a>
+        </div>
+        <div class="col-md-4" th:unless="${session.user != null}">
+          <a th:href="@{/login}" class="btn btn-outline-light action-button">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Zaloguj się aby dodać przepis
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-collection"></i>
+            </div>
+            <h4>Bogata Kolekcja</h4>
+            <p>Setki sprawdzonych przepisów od naszej społeczności</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-star"></i>
+            </div>
+            <h4>Oceny i Komentarze</h4>
+            <p>Dziel się opiniami i doświadczeniami z innymi</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-tags"></i>
+            </div>
+            <h4>Kategoryzacja</h4>
+            <p>Łatwe wyszukiwanie dzięki tagom i kategoriom</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert dla admina -->
+      <div class="mt-4" th:if="${session.user != null and session.user.role == 'ADMIN'}">
+        <div class="admin-alert">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <div>
+              <strong>Zalogowano jako administrator.</strong>
+              <a th:href="@{/admin}" class="ms-2">Przejdź do panelu administracyjnego</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stopka -->
+  <footer class="text-center py-3 mt-5">
+    SzybkiPrzepis @AgataStramska 2025
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

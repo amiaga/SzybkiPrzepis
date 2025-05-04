@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Przepis - SzybkiPrzepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Globalne ustawienia */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nawigacja */
+        .main-nav {
+            background: #000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: #fff !important;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.3s ease;
+            display: flex !important;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            color: rgba(255,255,255,0.8) !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar-brand {
+            color: #fff !important;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Header formularza */
+        .form-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            padding: 3rem 0;
+            color: white;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        /* Formularz */
+        .recipe-form {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 0.5rem;
+            border: 2px solid #e9ecef;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+        }
+
+        /* Przyciski */
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Stopka */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+
+        /* Pomocnicze informacje */
+        .help-text {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Select2-podobny styl dla wielokrotnego wyboru */
+        select[multiple] {
+            height: auto;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nawigacja z poprawionymi elementami -->
+    <nav class="navbar navbar-expand-lg main-nav">
+        <div class="container">
+            <a class="navbar-brand text-white" th:href="@{/}">
+                <i class="bi bi-house-door"></i> SzybkiPrzepis
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/recipe_list}">
+                            <i class="bi bi-book"></i> Przepisy
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/category_list}">
+                            <i class="bi bi-grid"></i> Kategorie
+                        </a>
+                    </li>
+                </ul>
+                <!-- Dodane przyciski profilu i wylogowania -->
+                <div class="user-nav">
+                    <a class="nav-link" th:href="@{/profile}">
+                        <i class="bi bi-person-circle"></i> Profil
+                    </a>
+                    <a class="nav-link" th:href="@{/logout}">
+                        <i class="bi bi-box-arrow-right"></i> Wyloguj
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header formularza -->
+    <header class="form-header">
+        <div class="container">
+            <h1 class="display-5">
+                <i class="bi bi-pencil-square"></i> Edytuj przepis
+            </h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <form th:action="@{'/update_recipe/' + ${recipe.id}}" th:object="${recipe}" method="post" class="recipe-form">            
+            <!-- Podstawowe informacje -->
+            <div class="form-section">
+                <h4 class="mb-4"><i class="bi bi-info-circle"></i> Podstawowe informacje</h4>
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Tytuł przepisu</label>
+                    <input type="text" id="title" class="form-control" th:field="*{title}" 
+                           required placeholder="Np. Spaghetti Bolognese">
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Kategoria</label>
+                    <select id="category" name="categoryId" class="form-select">
+                        <option value="">-- Wybierz kategorię --</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.id}"
+                                th:text="${cat.name}"
+                                th:selected="${cat.id == recipe.category?.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="preparationTime" class="form-label">Czas przygotowania (minuty)</label>
+                            <input type="number" id="preparationTime" class="form-control" 
+                                   th:field="*{preparationTime}" min="1">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="difficultyLevel" class="form-label">Poziom trudności</label>
+                            <select id="difficultyLevel" th:field="*{difficultyLevel}" class="form-select">
+                                <option value="">-- Wybierz poziom --</option>
+                                <option value="ŁATWY">Łatwy</option>
+                                <option value="ŚREDNI">Średni</option>
+                                <option value="TRUDNY">Trudny</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Składniki i przygotowanie -->
+            <div class="form-section">
+                <h4 class="mb-4"><i class="bi bi-list-check"></i> Składniki i przygotowanie</h4>
+                
+                <div class="mb-4">
+                    <label for="ingredients" class="form-label">Składniki</label>
+                    <textarea id="ingredients" class="form-control" th:field="*{ingredients}" 
+                             rows="6" placeholder="Każdy składnik w nowej linii"></textarea>
+                    <div class="help-text">Wpisz każdy składnik w osobnej linii, dodając ilości.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="preparationSteps" class="form-label">Sposób przygotowania</label>
+                    <textarea id="preparationSteps" class="form-control" th:field="*{preparationSteps}"
+                             rows="10" placeholder="Opisz kolejne kroki przygotowania"></textarea>
+                    <div class="help-text">Opisz dokładnie każdy krok przygotowania potrawy.</div>
+                </div>
+            </div>
+
+            <!-- Tagi -->
+            <div class="form-section">
+                <h4 class="mb-4"><i class="bi bi-tags"></i> Tagi (opcjonalne)</h4>
+                
+                <div class="mb-3">
+                    <select id="tags" name="tagsIds" multiple class="form-select">
+                        <option th:each="t : ${tags}"
+                                th:value="${t.id}"
+                                th:text="${t.name}"
+                                th:selected="${recipe.tags != null ? recipe.tags.contains(t) : false}">
+                        </option>
+                    </select>
+                    <div class="help-text">Przytrzymaj CTRL (lub CMD na Mac) aby wybrać wiele tagów.</div>
+                </div>
+            </div>
+
+            <!-- Przyciski akcji -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary action-button">
+                    <i class="bi bi-save"></i> Zapisz zmiany
+                </button>
+                <a th:href="@{'/recipe/' + ${recipe.id}}" class="btn btn-secondary action-button">
+                    <i class="bi bi-x-circle"></i> Anuluj
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Stopka -->
+    <footer class="text-center">
+        <div class="container">
+            <small>SzybkiPrzepis @AgataStramska 2025</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

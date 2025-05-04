@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie - SzybkiPrzepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .auth-card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,.1);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .auth-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        .auth-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .auth-body {
+            padding: 2rem;
+            background-color: white;
+        }
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+        }
+        .alert {
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
+        .form-check {
+            margin: 1rem 0;
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #dee2e6;
+        }
+        .divider::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #dee2e6;
+        }
+        .divider span {
+            background-color: white;
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Nawigacja -->
+    <div th:replace="~{navbar :: navbar}"></div>
+
+    <div class="container mt-5">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <i class="bi bi-lock"></i>
+                    </div>
+                    <h4 class="mb-0">Logowanie do SzybkiPrzepis</h4>
+                </div>
+                
+                <div class="auth-body">
+                    <!-- Alerty -->
+                    <div th:if="${param.error}" class="alert alert-danger d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Nieprawidłowa nazwa użytkownika lub hasło.
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-success d-flex align-items-center">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Zostałeś pomyślnie wylogowany.
+                    </div>
+
+                    <!-- Formularz logowania -->
+                    <form th:action="@{/login}" method="post">
+                        <!-- Nazwa użytkownika -->
+                        <div class="form-floating">
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="username" 
+                                   name="username" 
+                                   placeholder="Nazwa użytkownika"
+                                   required>
+                            <label for="username">
+                                <i class="bi bi-person me-1"></i>
+                                Nazwa użytkownika
+                            </label>
+                        </div>
+
+                        <!-- Hasło -->
+                        <div class="form-floating">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Hasło"
+                                   required>
+                            <label for="password">
+                                <i class="bi bi-key me-1"></i>
+                                Hasło
+                            </label>
+                        </div>
+
+                        <!-- Zapamiętaj mnie -->
+                        <div class="form-check">
+                            <input type="checkbox" 
+                                   class="form-check-input" 
+                                   id="remember-me" 
+                                   name="remember-me">
+                            <label class="form-check-label" for="remember-me">
+                                Zapamiętaj mnie
+                            </label>
+                        </div>
+
+                        <!-- Przyciski -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Zaloguj się
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Separator -->
+                    <div class="divider">
+                        <span>lub</span>
+                    </div>
+
+                    <!-- Link do rejestracji -->
+                    <div class="d-grid">
+                        <a th:href="@{/register}" class="btn btn-success">
+                            <i class="bi bi-person-plus"></i>
+                            Zarejestruj się
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

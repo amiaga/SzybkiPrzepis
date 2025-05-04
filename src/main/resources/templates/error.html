@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Błąd - SzybkiPrzepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        .error-card {
+            max-width: 600px;
+            width: 100%;
+            border: none;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .error-header {
+            background: linear-gradient(45deg, #dc3545, #b02a37);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .error-body {
+            padding: 2rem;
+            background-color: white;
+            text-align: center;
+        }
+        .error-message {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .btn i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nawigacja -->
+    <div th:replace="~{navbar :: navbar}"></div>
+
+    <div class="error-container">
+        <div class="container">
+            <div class="error-card mx-auto">
+                <div class="error-header">
+                    <div class="error-icon">
+                        <i class="bi bi-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="mb-0">Wystąpił błąd</h3>
+                </div>
+                
+                <div class="error-body">
+                    <p class="error-message" th:text="${errorMessage}">
+                        Przepraszamy, ale wystąpił nieoczekiwany błąd podczas przetwarzania Twojego żądania.
+                    </p>
+                    
+                    <div class="d-grid gap-3">
+                        <button onclick="history.back()" class="btn btn-lg btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-left"></i>
+                            Wróć do poprzedniej strony
+                        </button>
+                        <a th:href="@{/}" class="btn btn-lg btn-primary w-100">
+                            <i class="bi bi-house"></i>
+                            Przejdź do strony głównej
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

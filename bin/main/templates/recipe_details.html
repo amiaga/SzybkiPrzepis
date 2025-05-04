@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recipe.title + ' - SzybkiPrzepis'}">Szczegóły Przepisu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* Globalne ustawienia */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header przepisu */
+        .recipe-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            padding: 3rem 0;
+            color: white;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .recipe-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Karty z treścią */
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: none;
+        }
+
+        .recipe-section-title {
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        /* Lista składników i kroki */
+        .ingredient-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+            border-left: 4px solid #28a745;
+            margin: 1rem 0;
+        }
+
+        .preparation-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+            border-left: 4px solid #20c997;
+            margin: 1rem 0;
+        }
+
+        .step-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Znaczniki i meta informacje */
+        .recipe-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Sekcja komentarzy */
+        .comment-card {
+            border-left: 4px solid #28a745;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+        }
+
+        /* Przyciski akcji */
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Formularz komentarzy */
+        .comment-form {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Stopka */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nawigacja -->
+    <div th:replace="~{navbar :: navbar}"></div>
+
+    <!-- Header przepisu -->
+    <header class="recipe-header">
+        <div class="container">
+            <h1 class="recipe-title" th:text="${recipe.title}">Tytuł przepisu</h1>
+            
+            <div class="recipe-meta">
+                <span class="meta-badge">
+                    <i class="bi bi-grid"></i>
+                    <span th:text="${recipe.category?.name ?: 'Brak kategorii'}">Kategoria</span>
+                </span>
+                <span class="meta-badge">
+                    <i class="bi bi-bar-chart"></i>
+                    <span th:text="${recipe.difficultyLevel}">Poziom trudności</span>
+                </span>
+                <span class="meta-badge">
+                    <i class="bi bi-clock"></i>
+                    <span th:text="${recipe.preparationTime + ' min'}">Czas przygotowania</span>
+                </span>
+                <span class="meta-badge" th:each="t : ${recipe.tags}">
+                    <i class="bi bi-tag"></i>
+                    <span th:text="${t.name}">Tag</span>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Główna treść przepisu -->
+            <div class="col-md-8">
+                <div class="content-card">
+                    <h3 class="recipe-section-title">
+                        <i class="bi bi-card-checklist"></i> Składniki
+                    </h3>
+                    <div class="ingredient-content" th:text="${recipe.ingredients}">
+                        Składniki
+                    </div>
+
+                    <h3 class="recipe-section-title">
+                        <i class="bi bi-list-ol"></i> Sposób przygotowania
+                    </h3>
+                    <div class="step-content">
+                        <div class="preparation-content" th:text="${recipe.preparationSteps}">
+                            Kroki przygotowania
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-muted">
+                        <small>
+                            <i class="bi bi-calendar-event"></i>
+                            Dodano: <span th:text="${#temporals.format(recipe.creationDate, 'dd.MM.yyyy HH:mm')}">Data</span>
+                            <br>
+                            <i class="bi bi-person"></i>
+                            Autor: <span th:text="${recipe.author?.username ?: 'Anonim'}">Autor</span>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Sekcja komentarzy -->
+                <div class="content-card">
+                    <h3 class="recipe-section-title">
+                        <i class="bi bi-chat-dots"></i> Komentarze
+                    </h3>
+
+                    <!-- Lista komentarzy -->
+                    <div th:each="comment : ${recipe.comments}" class="comment-card">
+                        <div class="comment-header">
+                            <strong th:text="${comment.author?.username ?: 'Anonim'}">Autor komentarza</strong>
+                            <small class="text-muted" th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy HH:mm')}">Data</small>
+                        </div>
+                        <div class="rating-stars">
+                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1, comment.rating)}"></i>
+                        </div>
+                        <div class="mt-2" th:text="${comment.content}">Treść komentarza</div>
+                    </div>
+
+                    <!-- Formularz komentarzy -->
+                    <div th:if="${session.user != null}" class="comment-form mt-4">
+                        <h4>Dodaj komentarz</h4>
+                        <form th:action="@{/save_comment}" method="post" class="mt-3">
+                            <input type="hidden" name="recipeId" th:value="${recipe.id}" />
+
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Twój komentarz:</label>
+                                <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">Ocena (1-5):</label>
+                                <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" required />
+                            </div>
+
+                            <button type="submit" class="btn btn-success action-button">
+                                <i class="bi bi-send"></i> Dodaj komentarz
+                            </button>
+                        </form>
+                    </div>
+                    <div th:unless="${session.user != null}" class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Aby dodać komentarz, <a th:href="@{/login}" class="alert-link">zaloguj się</a>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Przyciski akcji -->
+            <div class="col-md-4">
+                <div class="content-card">
+                    <div class="d-grid gap-3">
+                        <a th:href="@{/recipe_list}" class="btn btn-secondary action-button">
+                            <i class="bi bi-arrow-left"></i> Powrót do listy
+                        </a>
+                        
+                        <th:block th:if="${session.user != null and (session.user.id == recipe.author?.id or session.user.role == 'ADMIN')}">
+                            <a th:href="@{'/edit_recipe/' + ${recipe.id}}" class="btn btn-warning action-button">
+                                <i class="bi bi-pencil"></i> Edytuj przepis
+                            </a>
+                            <a th:href="@{'/delete_recipe/' + ${recipe.id}}"
+                               class="btn btn-danger action-button"
+                               onclick="return confirm('Czy na pewno chcesz usunąć ten przepis?')">
+                                <i class="bi bi-trash"></i> Usuń przepis
+                            </a>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stopka -->
+    <footer class="text-center">
+        <div class="container">
+            <small>SzybkiPrzepis @AgataStramska 2025</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

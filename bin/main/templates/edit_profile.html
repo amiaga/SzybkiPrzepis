@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edycja profilu - SzybkiPrzepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-card {
+            border: none;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .profile-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .profile-body {
+            padding: 2rem;
+            background-color: white;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .password-info {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #0d6efd;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .form-label i {
+            color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nawigacja -->
+    <div th:replace="~{navbar :: navbar}"></div>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-icon">
+                            <i class="bi bi-person-gear"></i>
+                        </div>
+                        <h4 class="mb-0">Edycja profilu</h4>
+                    </div>
+
+                    <div class="profile-body">
+                        <form th:action="@{/profile/update}" 
+                              th:object="${user}" 
+                              method="post"
+                              class="needs-validation"
+                              novalidate>
+                            
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{username}">
+                            <input type="hidden" th:field="*{role}">
+
+                            <!-- Email -->
+                            <div class="form-floating mb-3">
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       th:field="*{email}" 
+                                       placeholder="Email"
+                                       required>
+                                <label for="email">
+                                    <i class="bi bi-envelope"></i>
+                                    Adres email
+                                </label>
+                                <div class="invalid-feedback">
+                                    Proszę podać prawidłowy adres email.
+                                </div>
+                            </div>
+
+                            <!-- Hasło -->
+                            <div class="form-floating">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       th:field="*{password}"
+                                       placeholder="Nowe hasło"
+                                       minlength="8">
+                                <label for="password">
+                                    <i class="bi bi-key"></i>
+                                    Nowe hasło
+                                </label>
+                            </div>
+
+                            <div class="password-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Pozostaw pole hasła puste, jeśli nie chcesz go zmieniać. 
+                                Nowe hasło musi mieć minimum 8 znaków.
+                            </div>
+
+                            <!-- Przyciski -->
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i>
+                                    Zapisz zmiany
+                                </button>
+                                <a th:href="@{/profile}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i>
+                                    Anuluj
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Walidacja formularza
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>

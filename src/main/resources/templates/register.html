@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejestracja - SzybkiPrzepis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        .register-card {
+            border: none;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+            margin: 2rem auto;
+        }
+        .register-header {
+            background: linear-gradient(135deg, #6f42c1, #6610f2);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .register-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .register-body {
+            padding: 2rem;
+            background: white;
+        }
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        .form-control:focus {
+            border-color: #6f42c1;
+            box-shadow: 0 0 0 0.25rem rgba(111,66,193,0.25);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+        }
+        .password-requirements {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+        .password-requirements ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .password-requirements li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #6c757d;
+        }
+        .password-requirements li i {
+            color: #6f42c1;
+        }
+        .alert {
+            border: none;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .alert-danger {
+            background-color: rgba(220,53,69,0.1);
+            color: #dc3545;
+            border-left: 4px solid #dc3545;
+        }
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background-color: #dee2e6;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        .divider span {
+            background-color: white;
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nawigacja -->
+    <div th:replace="~{navbar :: navbar}"></div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="register-card">
+                    <div class="register-header">
+                        <div class="register-icon">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <h4 class="mb-0">Dołącz do SzybkiPrzepis</h4>
+                    </div>
+                    
+                    <div class="register-body">
+                        <!-- Alert błędu -->
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span th:text="${error}">Błąd rejestracji</span>
+                        </div>
+
+                        <!-- Formularz rejestracji -->
+                        <form th:action="@{/register}" 
+                              method="post" 
+                              th:object="${user}"
+                              class="needs-validation"
+                              novalidate>
+
+                            <!-- Nazwa użytkownika -->
+                            <div class="form-floating">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       th:field="*{username}"
+                                       minlength="3"
+                                       maxlength="20"
+                                       required
+                                       placeholder="Nazwa użytkownika">
+                                <label for="username">
+                                    <i class="bi bi-person"></i>
+                                    Nazwa użytkownika
+                                </label>
+                                <div class="form-text">
+                                    Nazwa użytkownika musi mieć od 3 do 20 znaków.
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-floating">
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       th:field="*{email}"
+                                       required
+                                       placeholder="Email">
+                                <label for="email">
+                                    <i class="bi bi-envelope"></i>
+                                    Adres email
+                                </label>
+                            </div>
+
+                            <!-- Hasło -->
+                            <div class="form-floating">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       th:field="*{password}"
+                                       minlength="8"
+                                       required
+                                       placeholder="Hasło">
+                                <label for="password">
+                                    <i class="bi bi-key"></i>
+                                    Hasło
+                                </label>
+                            </div>
+
+                            <!-- Potwierdzenie hasła -->
+                            <div class="form-floating">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="confirmPassword" 
+                                       name="confirmPassword"
+                                       required
+                                       placeholder="Potwierdź hasło">
+                                <label for="confirmPassword">
+                                    <i class="bi bi-key-fill"></i>
+                                    Potwierdź hasło
+                                </label>
+                            </div>
+
+                            <!-- Wymagania hasła -->
+                            <div class="password-requirements">
+                                <div class="fw-bold mb-2">Hasło musi zawierać:</div>
+                                <ul>
+                                    <li><i class="bi bi-check-circle"></i> Minimum 8 znaków</li>
+                                    <li><i class="bi bi-check-circle"></i> Przynajmniej jedną wielką literę</li>
+                                    <li><i class="bi bi-check-circle"></i> Przynajmniej jedną cyfrę</li>
+                                    <li><i class="bi bi-check-circle"></i> Przynajmniej jeden znak specjalny</li>
+                                </ul>
+                            </div>
+
+                            <!-- Przyciski -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-person-plus"></i>
+                                    Zarejestruj się
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="divider">
+                            <span>lub</span>
+                        </div>
+
+                        <div class="d-grid">
+                            <a th:href="@{/login}" class="btn btn-outline-primary">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Zaloguj się
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    
+                    var password = document.getElementById('password')
+                    var confirmPassword = document.getElementById('confirmPassword')
+                    if (password.value !== confirmPassword.value) {
+                        event.preventDefault()
+                        confirmPassword.setCustomValidity('Hasła muszą być takie same')
+                    } else {
+                        confirmPassword.setCustomValidity('')
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>
